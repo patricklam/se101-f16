@@ -1,0 +1,199 @@
+\documentclass[11pt,onecolumn]{article}
+\usepackage{amsmath,amssymb,setspace,hyperref,graphicx,multirow}
+
+\setlength{\pdfpagewidth}{8.5in}
+\setlength{\pdfpageheight}{11in}
+\setlength{\evensidemargin}{-0.1in} \setlength{\oddsidemargin}{-0.1in}
+\setlength{\textwidth}{6.75in} \setlength{\textheight}{9.75in}
+\setlength{\topmargin}{-0.33in} \setlength{\headheight}{0in}
+
+\newcounter{qNum}
+\setcounter{qNum}{1}
+\newcommand{\q}[1]{\vspace*{0.1in} \noindent
+\arabic{qNum}.(#1)~\stepcounter{qNum}}
+
+%\makeatletter
+%\def\url@leostyle{%
+%  \@ifundefined{selectfont}{\def\UrlFont{\sf}}{\def\UrlFont{\scriptsize\ttfamily}}}
+%\makeatother
+%\urlstyle{leo}
+\newcommand{\squishlist}{
+ \begin{list}{$\bullet$}
+  { \setlength{\itemsep}{0pt}
+     \setlength{\parsep}{3pt}
+     \setlength{\topsep}{3pt}
+     \setlength{\partopsep}{0pt}
+     \setlength{\leftmargin}{1.5em}
+     \setlength{\labelwidth}{1em}
+     \setlength{\labelsep}{0.5em} } }
+\newcommand{\squishend}{
+  \end{list}  }
+
+\newenvironment{changemargin}[1]{% 
+  \begin{list}{}{% 
+    \setlength{\topsep}{0pt}% 
+    \setlength{\leftmargin}{#1}% 
+    \setlength{\rightmargin}{1em}
+    \setlength{\listparindent}{\parindent}% 
+    \setlength{\itemindent}{\parindent}% 
+    \setlength{\parsep}{\parskip}% 
+  }% 
+  \item[]}{\end{list}}
+
+\begin{document}
+\pagestyle{empty}
+
+\renewcommand{\arraystretch}{0.92}
+
+\begin{center}
+\begin{Large}
+Introduction to Methods of Software Engineering\\
+SE 101, Fall 2016\\[1em]
+\end{Large}
+
+\begin{large}
+Patrick Lam
+\end{large}
+\end{center}
+
+\section*{Brief Overview}
+This half-weight course introduces you to the Software Engineering programme and to engineering as a profession. The focus is more on soft skills (which are super important!) rather than hard technical skills, although you will still be writing software for the course project.
+
+\paragraph{Objectives.}
+By the end of this course, you will have demonstrated:
+\squishlist
+\item writing meaningful paragraphs of English text;
+\item discussing and summarizing engineering professionalism and ethics case studies;
+\item discussing and summarizing intellectual property as it applies to you as a student, employee and entrepreneur, as well as the associated revenue models; and
+\item writing C code to control a Tiva C Series board (and committing it to a version control system).
+\squishend
+
+\paragraph{Calendar Description.}
+\begin{quote}
+    An introduction to some of the basic methods and principles used by software engineers, including fundamentals of technical communication, measurement, analysis, and design. Some aspects of the software engineering profession, including standards, safety and intellectual property. Professional development including r\'esum\'e skills, interview skills, and preparation for co-op terms.
+\end{quote}
+
+\section*{General Information}
+
+\paragraph{Course Web Page/git repository.} 
+
+The best way to pull course updates in one shot is by cloning the following repository:
+
+\begin{center}
+\url{https://github.com/patricklam/se101-f16}.
+\end{center}
+
+You can also consult \url{https://patricklam.ca/se101-f16}. Some students prefer LEARN. We'll mirror updates on LEARN. And, consult Piazza for course discussions.
+
+\paragraph{Course staff.}~\\[1em]
+\begin{tabular}{ll}
+{\bf Instructor} & Patrick Lam, se-director@uwaterloo.ca\\
+Office Hours:& DC 2597C; Wednesdays 11:30--12:30, or by appointment,\\
+& or if \url{https://patricklam.ca/in} says so.\\ \\
+
+What to call me:& ``Patrick,'' or if you must: ``Prof.~Lam,'' or ``Dr.~Lam.''\\
+What not to call me:& ``Mr. Lam''\\ \\
+
+{\bf Teaching Assistant} &
+Rollen D'Souza, rs2dsouz@uwaterloo.ca\\
+Office Hours:& SE lab, DC 2577; Tuesdays 16:00--17:00\\[1em]
+{\bf Teaching Assistant (WEEF)} &
+Abdallah Arar, anarar@uwaterloo.ca\\
+Office Hours:& E2-1309; Mondays 11:30--12:30 \\
+\end{tabular}
+
+\section*{Schedule}
+\begin{tabular}{ @{\hspace{0.25in}}l l }
+    When \& where: & Lectures: T, 12:30--13:20, MC 1085; except: \\
+      & \hspace*{0.5in} Thursday, Oct.~13, follows Tuesday schedule\\
+      & \hspace*{0.5in} Oct.~18, midterm week, no lecture\\[0.5em]
+      & Seminar: T, 13:30--14:20, MC 1085, usually not held; exceptions include:\\
+      & \hspace*{0.5in} Sept.~13, Co-op session\\
+      & \hspace*{0.5in} Sept.~20, Co-op session\\
+      & \hspace*{0.5in} Oct.~4, Co-op session \\[0.5em]
+      & Labs: Th, 11:30--13:20, CPH 1346, ``open labs,'' but also: \\
+      & \hspace*{0.5in} Sept.~22, introduction to Lab 1\\
+      & \hspace*{0.5in} Sept.~29, Lab 1 demos (mandatory)\\
+      & \hspace*{0.5in} Oct.~6, overview towards Lab Project\\
+      & \hspace*{0.5in} Oct.~13, virtual Tuesday\\
+      & \hspace*{0.5in} Oct.~27, feedback on proposals for Lab Project\\
+      & \hspace*{0.5in} Nov.~3, Diversity 2\\
+      & \hspace*{0.5in} Nov.~24, Lab Project demos (mandatory)\\
+\end{tabular}
+
+\section*{Textbook}
+None.
+
+\section*{Grading Scheme}
+\begin{tabular}{ @{\hspace{0.25in}}l lr }
+ & In-class quizzes + short assignments &30\%\\
+ & Lab 1& 15\%\\
+ & Lab Project (teams of 2)& 50\%\\
+ & Co-op& 5\% \\
+ & ``activity about the transition to Waterloo Engineering'' & 1\% bonus\\
+\end{tabular}
+
+\vspace*{1em} \noindent There will be 6 in-class quizzes or take-home assignments, as well as
+the writing assignment, resulting in 7 marks. I'll take your best 6 marks for your
+in-class quiz/short assignment mark. I'll announce the quizzes on Piazza the week
+before.
+
+\vspace*{1em} \noindent There will be a separate handout with more details on the Lab Project.
+
+\section*{Due Dates}
+\squishlist
+\item Sep 19, 5:59PM: resume quiz on LEARN
+\item Sep 19, 5:59PM: schedule appointment with Abdallah for resume critique
+\item Sep 29: Lab 1 submission/demos
+\item Oct 20: Lab Project proposals
+\item Oct 25: Short writing assignment (1 page); details to follow
+\item Nov 24: Lab Project demos
+\squishend
+\newpage
+\section*{Weekly Lecture Schedule}
+Here's my current best guess at the week-to-week lecture schedule for the term.
+\squishlist
+\item Week 1: What is CS/what is SE? Peanut Butter \& Honey sandwich exercise.
+\item Week 2: How to Student.
+\item Week 3: Intellectual Property / Startups / Money and the Internet.
+\item Week 4: Communication.
+\item Week 5: Communication.
+\item Week 6: no lecture (midterm week)
+\item Week 7: About large-scale Software Engineering (vs small-batch artisanal coding).
+\item Week 8: Security (guest lecture by Mahesh Tripunitara).
+\item Week 9: Program efficiency.
+\item Week 10: Professionalism/ethics case studies.
+\item Week 11: Professionalism/ethics case studies.
+\item Week 12: Licensing/standards/the environment.
+\squishend
+I'm also going to incorporate a preview of your curriculum every week.
+
+\section*{Policies}
+
+\paragraph{Collaboration.} I encourage collaboration, but I condemn 
+plagiarism: copying penalizes students who do the work. I will therefore
+be reporting any cases of plagiarism that I detect.
+
+You are expected to collaborate within your team. Also, you may
+discuss ideas, design alternatives, and help each other debug small
+fragments of code. Each team must submit their own,
+independently-developed, code for each lab. A good heuristic is
+``look, but don't write:'' you can look at other teams' code, but
+don't do that anywhere that you might be writing your own code.
+
+To be precise, teams are not permitted to share code electronically
+or in written form.
+
+\begin{tabular}{ @{\hspace{0.25in}}l l }
+Lateness: & No late submissions accepted. \\
+Academic integrity: & \url{http://uwaterloo.ca/academicintegrity/}\\
+Petition \& Grievance:
+& \url{http://secretariat.uwaterloo.ca/Policies/policy70.htm}\\
+Discipline: & \url{http://secretariat.uwaterloo.ca/Policies/policy71.htm} \\
+Penalties: 
+&  \url{http://secretariat.uwaterloo.ca/guidelines/penaltyguidelines.htm}\\
+Appeals: & \url{http://secretariat.uwaterloo.ca/Policies/policy72.htm} \\
+AccessAbility: & \url{https://uwaterloo.ca/disability-services/}
+\end{tabular}
+
+\end{document}
