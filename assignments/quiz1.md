@@ -1,6 +1,8 @@
 # SE 101 In-Class Quiz 1
 ## September 20, 2016
 
+This quiz is open-book. In fact you can even (quietly) talk to your neighbour about it.
+
 ### Question 1: The syllabus refers you "the best way to pull course updates". If you go there, you can find the class name for the SE 2014s. What is it?
 
 ### Question 2: What is one person/resource where you can get help?
