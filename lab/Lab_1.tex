@@ -33,10 +33,11 @@ In the first lab you are required to implement a program that takes as input a s
 
 
 \section*{Requirements}
-The program must accept a line of text from the serial input and transmit the Morse encoding using the \emph{green} LED.  A line of text is delimited using the linefeed (\texttt{\textbackslash n}) character.  The program must transmit the Morse encoding of the message exactly once and then must continue to accept further messages from the user.  You must implement the morse encoding for all 26 english letters, in both upper case and lower case.  We will test atleast five characters at random as well as ill-formed input.
+The program must accept a line of text from the serial input and transmit the Morse encoding using the \emph{green} LED.  A line of text is delimited using the linefeed/newline (\texttt{\textbackslash n}) character.  The program must transmit the Morse encoding of the message exactly once and then must continue to accept further messages from the user.  You must implement the morse encoding for all 26 english letters, in both upper case and lower case.  We will test atleast five characters at random as well as ill-formed input.
 
-A dot-signal lasts one second.  A dash-signal lasts three dots.  Between signals there is a one dot length wait.  Between words there is a three dot length wait.  Punctuation and case should be ignored.
+A dot-signal lasts one second.  A dash-signal lasts three dots.  Between dots/dashes there is a \emph{one} dot length wait.  Between letters there is a \emph{three} dot length wait.  Between words there is a \emph{seven} dot length wait.  Punctuation and case should be ignored.
 
+The final submission (commit) must be made by 1130 on Thursday, September 29, 2016. You will demo your solution during that lab period.
 
 \section*{Marking Scheme}
 \begin{center}
@@ -60,7 +61,7 @@ A dot-signal lasts one second.  A dash-signal lasts three dots.  Between signals
 \section*{Submission}
 You must submit your assignment using the ECE SVN (subversion) repository.  You are graded on your use of Subversion.  We expect to see at least two non-trivial commits. Trivial commits are those that consist of at most changes to whitespace.
 
-There will be a separate document on how to use ECE SVN.
+There will be a separate document on how to use ECE SVN.  Please see Piazza for more information.
 
 Please commit your solutions to:
 
@@ -73,10 +74,11 @@ where you replace ``YOUR\_WATID'' with your WatID (e.g. p23lam). Email Patrick L
 \section*{Tips}
 \begin{itemize}
 	\item Use Energia's \texttt{Serial} library.
-	\item Energia's Serial Monitor supports different line endings.  Be sure to select linefeed only!
+	\item Energia's Serial Monitor supports different line endings.  Be sure to select newline only!
 	\item Consider how this lab can be broken into components.
 	\item What we mean by ``easy to modify'': Can we easily remove some components of your lab for use in a different program?
 	\item GCC supports encoding numbers in binary representation like so: \texttt{0b101010111}.
+	\item Make sure to follow Piazza.
 \end{itemize}
 
 \begin{flushleft}
