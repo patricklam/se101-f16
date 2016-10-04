@@ -1,0 +1,123 @@
+\documentclass[11pt]{article}
+\usepackage{textcomp}
+\usepackage{listings}
+\usepackage{tikz}
+\usepackage{enumerate}
+\usepackage{url}
+%\usepackage{algorithm2e}
+\usetikzlibrary{arrows,automata,shapes}
+\tikzstyle{block} = [rectangle, draw, fill=blue!20, 
+    text width=5em, text centered, rounded corners, minimum height=2em]
+\tikzstyle{bt} = [rectangle, draw, fill=blue!20, 
+    text width=1em, text centered, rounded corners, minimum height=2em]
+
+\lstset{ %
+language=Java,
+basicstyle=\ttfamily,commentstyle=\scriptsize\itshape,showstringspaces=false,breaklines=true,numbers=left}
+
+\newtheorem{defn}{Definition}
+\newtheorem{crit}{Criterion}
+
+\newcommand{\handout}[5]{
+  \noindent
+  \begin{center}
+  \framebox{
+    \vbox{
+      \hbox to 5.78in { {\bf Intro to Methods of Software Engineering } \hfill #2 }
+      \vspace{4mm}
+      \hbox to 5.78in { {\Large \hfill #5  \hfill} }
+      \vspace{2mm}
+      \hbox to 5.78in { {\em #3 \hfill #4} }
+    }
+  }
+  \end{center}
+  \vspace*{4mm}
+}
+
+\newcommand{\lecture}[4]{\handout{#1}{#2}{#3}{#4}{Lecture #1}}
+\topmargin 0pt
+\advance \topmargin by -\headheight
+\advance \topmargin by -\headsep
+\textheight 8.9in
+\oddsidemargin 0pt
+\evensidemargin \oddsidemargin
+\marginparwidth 0.5in
+\textwidth 6.5in
+
+\parindent 0in
+\parskip 1.5ex
+%\renewcommand{\baselinestretch}{1.25}
+
+\newcommand{\squishlist}{
+ \begin{list}{$\bullet$}
+  { \setlength{\itemsep}{0pt}
+     \setlength{\parsep}{3pt}
+     \setlength{\topsep}{3pt}
+     \setlength{\partopsep}{0pt}
+     \setlength{\leftmargin}{1.5em}
+     \setlength{\labelwidth}{1em}
+     \setlength{\labelsep}{0.5em} } }
+\newcommand{\squishlisttwo}{
+ \begin{list}{$\bullet$}
+  { \setlength{\itemsep}{0pt}
+     \setlength{\parsep}{0pt}
+    \setlength{\topsep}{0pt}
+    \setlength{\partopsep}{0pt}
+    \setlength{\leftmargin}{2em}
+    \setlength{\labelwidth}{1.5em}
+    \setlength{\labelsep}{0.5em} } }
+\newcommand{\squishend}{
+  \end{list}  }
+
+\begin{document}
+
+\lecture{4 --- October 4, 2016}{Fall 2016}{Patrick Lam}{version 1}
+
+\section*{Written Communication: Code and Emails}
+
+\section*{Code documentation}
+Some best practices for code comments:
+\begin{enumerate}
+\item structure your code (just like your writing).\\
+(avoid 2000-line methods!)
+\item choose good names for variables, methods/functions, classes.
+\squishlist
+\item {\tt i} is totally fine for a loop variable!
+\item follow language conventions, e.g. {\tt getX()} versus {\tt x()} (or just allowing direct access to {\tt x}).
+\item describe what the thing is/does, e.g. {\tt exceptionQueue()}.
+\squishend
+\item in your code, add comments when there are complicated passages (better yet, simplify the code!). One exception: ``I tried the obvious thing X but it fails because Y'' is a good comment.
+\item use good parameter names and include documentation comments for methods and classes, including \verb+@link/@see+ references whem appropriate.
+{\small 
+\begin{quote}
+\begin{verbatim}
+/** 
+ * A computational engine for solving relational satisfiability problems. 
+ * Such a problem is described by a {@link kodkod.ast.Formula formula} in 
+ * first order relational logic; finite {@link kodkod.instance.Bounds bounds} on 
+ * the value of each {@link Relation relation} constrained by the formula; and 
+ * a set of {@link kodkod.engine.config.Options options} specifying, among other global 
+ * parameters, the length of bitvectors that describe the meaning of 
+ * {@link IntExpression integer expressions} in the given formula.   The options are 
+ * usually reused between invocations to the {@linkplain #solve(Formula, Bounds) solve}
+ * methods, so they are specified as a part of the {@linkplain KodkodSolver solver} state. 
+ * 
+ * <p>
+ * A {@link KodkodSolver} takes as input a relational problem and produces a 
+ * satisfying model or an {@link Instance instance} of it, if one exists.  Some 
+ * implementation of this interface can also produce a {@link Proof proof} of 
+ * unsatisfiability, if the given problem has no models.
+ * </p>
+ * 
+ * @specfield options: Options 
+ * @author Emina Torlak 
+ */
+\end{verbatim}
+\end{quote}
+}
+\item use unit tests and assertions (more later).
+\end{enumerate}
+
+more to come
+
+\end{document}
