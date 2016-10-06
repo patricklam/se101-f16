@@ -7,3 +7,19 @@ Mini-game emulating rock-paper-scissors. You should peek at Wire\_Util.ino. It m
 Components Used:
  - Accelerometer for shake detection.
  - OLED Screen and button for user interface.
+
+## File Storage Project (Project\_Storage)
+This example project implements a simple flat-file storage system on the Tiva Board.
+
+Components Used:
+ - Device EEPROM, via the TivaWare DriverLib API.
+ - Orbit Booster Pack OLED for Display.
+ - Serial (UART) for receiving file operations.
+
+Implemented Features:
+ - Adding/Retrieving Files via Serial I/O.
+ - Basic flat-file system functionality (Add/Remove/Read/Stat/Reset)
+
+TODO:
+ - Use OLED Screen to show information about file system.
+ - (Maybe) use buttons to lock/unlock file system.

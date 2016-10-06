@@ -7,6 +7,14 @@ static const uint32_t FileSystemMagicCode         = 0xF17E0000;
 static const uint32_t FileSystemTableBegin        = 8;
 static const uint32_t FileSystemDataBegin         = FileSystemTableBegin + sizeof(union FileSystemTable);
 
+/**
+ * File System State Data Structure
+ * Stores, in memory, the number of files, file entries, and next
+ * free file entry block to use.
+ * 
+ * Also contains the allocation bit table which is useful for finding
+ * a location to actually write the file!
+ */
 struct FileSystemState
 {
   uint32_t                fileCount;
@@ -19,6 +27,10 @@ struct FileSystemState
   uint8_t                 allocTable[FileSystemAllocTableLength];
 } fileSystemActiveState;
 
+/**
+ * Writes the file systems active state to the EEPROM. This is so that
+ * we can resume where we left off in case of a power off.
+ */
 static void fileSystemWriteCache()
 {
   EEPROMProgram(fileSystemActiveState.fileTable.raw, FileSystemTableBegin, sizeof(union FileSystemTable));
@@ -149,6 +161,7 @@ void fileSystemRemoveFile(uint8_t key)
   fileSystemActiveState.fileTable.entry[useIndex].location = 0;
   fileSystemActiveState.fileTable.entry[useIndex].next = fileSystemActiveState.fileFreeEntry;
   fileSystemActiveState.fileFreeEntry = useIndex;
+  fileSystemActiveState.fileCount--;
   
   fileSystemWriteCache();
 }
@@ -198,6 +211,7 @@ bool fileSystemAddFile(uint8_t key, uint32_t * data, size_t count)
   fileSystemActiveState.fileTable.entry[useIndex].size = count;
   fileSystemActiveState.fileTable.entry[useIndex].location = location;
   fileSystemActiveState.fileTable.entry[useIndex].next = -1;
+  fileSystemActiveState.fileCount++;
   
   EEPROMProgram(data, location, ((count+3)/4) * 4);
   fileSystemWriteCache();
