@@ -1,59 +1,88 @@
 #include <stddef.h>
 #include "fileSystem.h"
 
-uint32_t dummyData[10] = { 0xCAFEBABE };
-
 void setup() 
 {
   Serial.begin(9600);
   delay(1000);
-  EEPROM_Init();
-
-  fileSystemAddFile(10, dummyData, 10 * sizeof(int));
-  fileSystemAddFile(11, dummyData, 10 * sizeof(int));
   
-  File fileStat = { 0 };
-  if( fileSystemStat(10, &fileStat) )
-  {
-    Serial.println(fileStat.key, DEC);
-    Serial.println(fileStat.size, DEC);
-  }
+  EEPROM_Init();
+  delay(1000);
 }
 
 void commandStore()
 {
+  while( 0 == Serial.available());
   uint8_t key = Serial.read();
-  uint8_t amount = Serial.read();
   
+  while( 0 == Serial.available());
+  uint8_t const amount = Serial.read();
+  
+  uint32_t buffer[256];
+
+  while( 0 == Serial.available());
+  size_t amountRead = Serial.readBytes((char*)buffer, amount);
+  
+  if(!amountRead)
+  {
+    Serial.write((byte)1);
+    return;
+  }
+  
+  if(!fileSystemAddFile(key, buffer, amount))
+  {
+    Serial.write((byte)2);
+    return;
+  }
+
+  Serial.write((byte)0);
 }
 
 void commandRetrieve()
 {
+  while(0 == Serial.available());
   uint8_t key = Serial.read();
+  
+  uint32_t buffer[256];
+  byte amount = 0;
+  byte errorCode = fileSystemRetrieve(key, buffer, 256*sizeof(uint32_t), &amount);
+
+  Serial.write(&amount, 1);
+  if(amount)
+  {
+    Serial.write((uint8_t*)buffer, amount);
+  }
+  Serial.write(&errorCode, 1);
 }
 
+void commandReset()
+{
+  fileSystemCheck(true);
+}
 
 void loop() 
 {
+  while(0 == Serial.available());
   
-  uint8_t buffer[64] = { 0 };
-  uint8_t output[64] = { 0 };
-
-  if(Serial.available())
+  char command = Serial.read();
+  switch(command)
   {
-    char command = Serial.read();
-    switch(command)
-    {
-    case 's':
-      commandStore();
-      break;
-      
-    case 'r':
-      commandRetrieve();
-      break;
-      
-    default:
-      break;
-    }
+  case 's':
+    commandStore();
+    break;
+    
+  case 'r':
+    commandRetrieve();
+    break;
+
+  case 'e':
+    commandReset();
+    break;
+
+  case 'l':
+    break;
+    
+  default:
+    break;
   }
 }
