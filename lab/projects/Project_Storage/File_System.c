@@ -1,3 +1,6 @@
+#include <inttypes.h>
+#include <stdbool.h>
+
 #include <eeprom.h>
 #include <hw_eeprom.h>
 
@@ -5,7 +8,7 @@
 
 static const uint32_t FileSystemMagicCode         = 0xF17E0000;
 static const uint32_t FileSystemTableBegin        = 8;
-static const uint32_t FileSystemDataBegin         = FileSystemTableBegin + sizeof(union FileSystemTable);
+static const uint32_t FileSystemDataBegin         = 8 + sizeof(union FileSystemTable);
 
 /**
  * File System State Data Structure
@@ -19,13 +22,28 @@ struct FileSystemState
 {
   uint32_t                fileCount;
   union FileSystemTable   fileTable;
-  uint32_t                fileFreeEntry;
+  int32_t                 fileFreeEntry;
 
   // Every Bit represents a Word (4 Bytes) in the File System
   // Helps us easily discover large contiguous regions of free space
   // without having to construct a complex data structure
   uint8_t                 allocTable[FileSystemAllocTableLength];
 } fileSystemActiveState;
+
+struct FileSystemStatus fileSystemStatus()
+{
+  static size_t bitCount[16] = { 0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3, 3, 4 };
+  
+  struct FileSystemStatus value = { 0, FileSystemAllocTableLength * 8, fileSystemActiveState.fileCount };
+
+  for(unsigned i = 0; i < FileSystemAllocTableLength; ++i)
+  {
+    uint8_t alloc = fileSystemActiveState.allocTable[i];
+    value.wordsUsed += bitCount[alloc >> 4] + bitCount[alloc & 0xF];
+  }
+  
+  return value;
+}
 
 /**
  * Writes the file systems active state to the EEPROM. This is so that
@@ -67,11 +85,13 @@ void fileSystemCheck(bool forceCreate)
       int startBit = ((location - FileSystemDataBegin)/ 4) % 32;
       int bitCount = (count + 3) / 4;
       int xi = startBit;
-      for(int i = startByte; i < FileSystemAllocTableLength; ++i)
+      
+      for(int i = startByte; bitCount && (i < FileSystemAllocTableLength); ++i)
       {
-        for(; xi < 32; xi++)
+        for(; bitCount && (xi < 32); xi++)
         {
-          bitWrite(fileSystemActiveState.allocTable[i], xi, 1);
+          fileSystemActiveState.allocTable[i] |= 1 << xi;
+          --bitCount;
         }
         xi = 0;
       }
@@ -80,11 +100,11 @@ void fileSystemCheck(bool forceCreate)
   }
 }
 
-void EEPROM_Init()
+void fileSystemInit()
 {
   EEPROMInit();
-  delay(500);
-  fileSystemCheck();
+  delay(100);
+  fileSystemCheck(false);
 }
 
 void fileSystemCreate()
@@ -138,32 +158,35 @@ void fileSystemRemoveFile(uint8_t key)
   return;
 
  FoundFile:
-  int useIndex = i;
-  int location = stat.location;
-  int count = stat.size;
-  
-  // Erase the appropriate locations in teh allocation table.
-  int startByte = ((location - FileSystemDataBegin)/ 4) / 32;
-  int startBit = ((location - FileSystemDataBegin)/ 4) % 32;
-  int bitCount = (count + 3) / 4;
-  int xi = startBit;
-  for(int i = startByte; i < FileSystemAllocTableLength; ++i)
   {
-    for(; xi < 32; xi++)
+    int useIndex = i;
+    int location = stat.location;
+    int count = stat.size;
+    
+    // Erase the appropriate locations in teh allocation table.
+    int startByte = ((location - FileSystemDataBegin)/ 4) / 32;
+    int startBit = ((location - FileSystemDataBegin)/ 4) % 32;
+    int bitCount = (count + 3) / 4;
+    int xi = startBit;
+    for(int i = startByte; bitCount && (i < FileSystemAllocTableLength); ++i)
     {
-      bitWrite(fileSystemActiveState.allocTable[i], xi, 0);
+      for(; bitCount && (xi < 32); xi++)
+      {
+        fileSystemActiveState.allocTable[i] &= ~(1 << xi);
+        --bitCount;
+      }
+      xi = 0;
     }
-    xi = 0;
-  }
-
-  fileSystemActiveState.fileTable.entry[useIndex].key = 0;
-  fileSystemActiveState.fileTable.entry[useIndex].size = 0;
-  fileSystemActiveState.fileTable.entry[useIndex].location = 0;
-  fileSystemActiveState.fileTable.entry[useIndex].next = fileSystemActiveState.fileFreeEntry;
-  fileSystemActiveState.fileFreeEntry = useIndex;
-  fileSystemActiveState.fileCount--;
   
-  fileSystemWriteCache();
+    fileSystemActiveState.fileTable.entry[useIndex].key = 0;
+    fileSystemActiveState.fileTable.entry[useIndex].size = 0;
+    fileSystemActiveState.fileTable.entry[useIndex].location = 0;
+    fileSystemActiveState.fileTable.entry[useIndex].next = fileSystemActiveState.fileFreeEntry;
+    fileSystemActiveState.fileFreeEntry = useIndex;
+    fileSystemActiveState.fileCount--;
+    
+    fileSystemWriteCache();
+  }
 }
 
 bool fileSystemAddFile(uint8_t key, uint32_t * data, size_t count)
@@ -185,7 +208,7 @@ bool fileSystemAddFile(uint8_t key, uint32_t * data, size_t count)
   {
     for(int xi = 0; xi < 32; xi++)
     {
-      if(!bitRead(fileSystemActiveState.allocTable[i], xi))
+      if(!(fileSystemActiveState.allocTable[i] & (1 << xi)))
       {
         if( ++bitsFound >= bitsNeeded )
         {
@@ -202,32 +225,35 @@ bool fileSystemAddFile(uint8_t key, uint32_t * data, size_t count)
   return false;
   
  FoundSpace:
-  uint16_t location = FileSystemDataBegin + bitsFoundAt * 4;
-  
-  int useIndex = fileSystemActiveState.fileFreeEntry;
-  fileSystemActiveState.fileFreeEntry = fileSystemActiveState.fileTable.entry[useIndex].next;
-
-  fileSystemActiveState.fileTable.entry[useIndex].key = key;
-  fileSystemActiveState.fileTable.entry[useIndex].size = count;
-  fileSystemActiveState.fileTable.entry[useIndex].location = location;
-  fileSystemActiveState.fileTable.entry[useIndex].next = -1;
-  fileSystemActiveState.fileCount++;
-  
-  EEPROMProgram(data, location, ((count+3)/4) * 4);
-  fileSystemWriteCache();
-
-  // Fix the allocation table
-  int startByte = ((location - FileSystemDataBegin)/ 4) / 32;
-  int startBit = ((location - FileSystemDataBegin)/ 4) % 32;
-  int bitCount = (count + 3) / 4;
-  int xi = startBit;
-  for(int i = startByte; i < FileSystemAllocTableLength; ++i)
   {
-    for(; xi < 32; xi++)
+    uint16_t location = FileSystemDataBegin + bitsFoundAt * 4;
+  
+    int useIndex = fileSystemActiveState.fileFreeEntry;
+    fileSystemActiveState.fileFreeEntry = fileSystemActiveState.fileTable.entry[useIndex].next;
+  
+    fileSystemActiveState.fileTable.entry[useIndex].key = key;
+    fileSystemActiveState.fileTable.entry[useIndex].size = count;
+    fileSystemActiveState.fileTable.entry[useIndex].location = location;
+    fileSystemActiveState.fileTable.entry[useIndex].next = -1;
+    fileSystemActiveState.fileCount++;
+    
+    EEPROMProgram(data, location, ((count+3)/4) * 4);
+    fileSystemWriteCache();
+  
+    // Fix the allocation table
+    int startByte = ((location - FileSystemDataBegin)/ 4) / 32;
+    int startBit = ((location - FileSystemDataBegin)/ 4) % 32;
+    int bitCount = (count + 3) / 4;
+    int xi = startBit;
+    for(int i = startByte; bitCount && (i < FileSystemAllocTableLength); ++i)
     {
-      bitWrite(fileSystemActiveState.allocTable[i], xi, 1);
+      for(; bitCount && (xi < 32); xi++)
+      {
+        fileSystemActiveState.allocTable[i] |= (1 << xi);
+        --bitCount;
+      }
+      xi = 0;
     }
-    xi = 0;
   }
   return true;
 }

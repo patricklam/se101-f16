@@ -19,7 +19,7 @@ Components Used:
 Implemented Features:
  - Adding/Retrieving Files via Serial I/O.
  - Basic flat-file system functionality (Add/Remove/Read/Stat/Reset)
+ - Use OLED Screen to show information about file system.
 
 TODO:
- - Use OLED Screen to show information about file system.
  - (Maybe) use buttons to lock/unlock file system.

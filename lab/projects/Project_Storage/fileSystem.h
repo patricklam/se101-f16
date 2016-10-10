@@ -1,8 +1,14 @@
 #ifndef FILE_SYSTEM_H
 #define FILE_SYSTEM_H
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+  
 #include <stdbool.h>
 #include <stddef.h>
+#include <inttypes.h>
 
 typedef struct File
 {
@@ -11,17 +17,25 @@ typedef struct File
   uint16_t    size;
 } File;
 
-void EEPROM_Init();
+struct FileSystemStatus
+{
+  size_t      wordsUsed;
+  size_t      maxWords;
+  size_t      fileCount; 
+};
+
+void fileSystemInit();
 void fileSystemCreate();
-void fileSystemCheck(bool forceCreate = false);
+void fileSystemCheck(bool forceCreate);
 bool fileSystemStat(uint8_t key, File* status);
 bool fileSystemAddFile(uint8_t key, uint32_t * data, size_t count);
 void fileSystemRemoveFile(uint8_t key);
 int fileSystemRetrieve(uint8_t key, uint32_t * data, size_t bufferLength, uint8_t* readAmount);
+struct FileSystemStatus fileSystemStatus();
 
 
 #define               FileSystemMaximumFileCount    18
-#define               FileSystemMaximumBytes        512
+#define               FileSystemMaximumBytes        1024
 #define               FileSystemAllocTableLength    FileSystemMaximumBytes / (sizeof(uint32_t) * 8)
 
 /**
@@ -36,15 +50,18 @@ int fileSystemRetrieve(uint8_t key, uint32_t * data, size_t bufferLength, uint8_
  */
 union __attribute__ ((packed)) FileSystemTable
 {
-  struct __attribute__ ((packed))
+  struct __attribute__ ((packed)) EntryType
   {
     uint16_t location   : 16;
     uint16_t key        : 16;
     uint16_t size       : 16;
     int16_t next        : 16;
   } entry[FileSystemMaximumFileCount];
-  uint32_t raw[sizeof(entry) / 4];
+  uint32_t raw[sizeof(struct EntryType) / 4];
 };
 
+#ifdef __cplusplus
+}
+#endif
 
 #endif
