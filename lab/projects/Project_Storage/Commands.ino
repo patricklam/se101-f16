@@ -1,7 +1,7 @@
 #include <inttypes.h>
 #include <HardwareSerial.h>
 #include "defines.h"
-#include "fileSystem.h"
+#include "File_System.h"
 
 static void waitOnSerialInput()
 {
@@ -32,13 +32,42 @@ void commandStore()
     return;
   }
   
-  if(!fileSystemAddFile(key, buffer, amount))
+  if(!FileSystemAddFile(key, buffer, amount))
   {
     Serial.write((byte)2);
     return;
   }
-
+  
   Serial.write((byte)0);
+}
+
+void commandList()
+{
+  struct FileSystemStatus status;
+  FileSystemStatus(&status);
+
+  for(unsigned i = 0; i < status.fileCount; ++i)
+  {
+    Serial.print(status.fileStatus[i].key, DEC);
+    Serial.print(",");
+    Serial.print(status.fileStatus[i].location, DEC);
+    Serial.print("B,");
+    Serial.print(status.fileStatus[i].size, DEC);
+    Serial.print("B");
+    Serial.println();
+  }
+  Serial.write((byte)0);
+}
+
+void commandDelete()
+{
+  waitOnSerialInput();
+  uint8_t key = Serial.read();
+
+  if(FileSystemRemoveFile(key))
+    Serial.write((byte)0);
+  else
+    Serial.write((byte)1);
 }
 
 void commandRetrieve()
@@ -48,7 +77,7 @@ void commandRetrieve()
   
   uint32_t buffer[256];
   byte amount = 0;
-  byte errorCode = fileSystemRetrieve(key, buffer, 256*sizeof(uint32_t), &amount);
+  byte errorCode = FileSystemRetrieve(key, buffer, 256*sizeof(uint32_t), &amount);
 
   Serial.write(&amount, 1);
   if(amount)
@@ -60,6 +89,6 @@ void commandRetrieve()
 
 void commandReset()
 {
-  fileSystemCheck(true);
+  FileSystemCheck(true);
 }
 

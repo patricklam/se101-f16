@@ -4,7 +4,7 @@
 #include <OrbitOled.h>
 #include <OrbitOledChar.h>
 #include <OrbitOledGrph.h>
-#include "fileSystem.h"
+#include "File_System.h"
 
 static void drawUsageBar();
 
@@ -27,9 +27,11 @@ void FileSystemMonitorUpdate()
 
 static void drawUsageBar()
 {
-  char strFileCount[10];
-  struct FileSystemStatus stat = fileSystemStatus();
-  sprintf(strFileCount, "NUM:%02d", stat.fileCount);
+  char strFileCount[7 + 1];
+  struct FileSystemStatus stat;
+
+  FileSystemStatus(&stat);
+  sprintf(strFileCount, "NUM:%03d", stat.fileCount);
   
   OrbitOledMoveTo(0, 0);
   OrbitOledDrawString("USE:[");

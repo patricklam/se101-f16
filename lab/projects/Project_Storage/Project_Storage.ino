@@ -1,12 +1,12 @@
 #include <stddef.h>
 #include "defines.h"
-#include "fileSystem.h"
-#include "fileSystemMonitor.h"
+#include "File_System.h"
+#include "File_System_Monitor.h"
 
 void setup() 
 {
   Serial.begin(BAUD_RATE);
-  fileSystemInit();
+  FileSystemInit();
   FileSystemMonitorInit();
   FileSystemMonitorUpdate();
 }
@@ -36,6 +36,27 @@ void loop()
   case 'e':
     commandReset();
     break;
+
+  case 'l':
+    commandList();
+    break;
+
+  case 'd':
+    commandDelete();
+    break;
+
+  case 'u':
+    // Allocation table dump.
+    for(int i = 0; (i < FileSystemAllocTableLength); ++i)
+    {
+      for(unsigned xi = 0; (xi < 8); xi++)
+      {
+        Serial.print((fileSystemActiveState.allocTable[i] >> xi) & 1, DEC);
+      }
+      delay(10);
+      Serial.println();
+    }
+    return;
 
   default:
     return;
