@@ -9,6 +9,8 @@ Components Used:
  - OLED Screen and button for user interface.
 
 ## File Storage Project (Project\_Storage)
+![Project Storage: Displaying file system usage.](../Images/Project-Storage.jpg)
+
 This example project implements a simple flat-file storage system on the Tiva Board.
 
 Components Used:
