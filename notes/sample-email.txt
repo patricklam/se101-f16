@@ -1,0 +1,21 @@
+To: Stéphane Somé <ssome@site.uottawa.ca> (*@\textcircled{1}@*)
+From: Patrick Lam <se-director@uwaterloo.ca>
+Subject: chemistry & CEAB accreditation (*@\textcircled{2}@*)
+Date: Wed, 5 Oct 2016 13:26:34 -0400
+
+Hi Stephane,
+
+(*@\textcircled{3}@*)
+
+I've heard that your Software Engineering programme managed to get
+re-accredited without mandatory Chemistry. We've been trying to
+figure out what's the smallest amount of chemistry we could include
+here at Waterloo in Software Engineering.
+
+Did you receive any feedback from the CEAB about not including chemistry? (*@\textcircled{4}@*)
+
+Thanks!
+
+Patrick Lam
+Director, Software Engineering Programme (*@\textcircled{5}@*)
+University of Waterloo

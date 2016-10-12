@@ -1,4 +1,5 @@
 \documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
 \usepackage{textcomp}
 \usepackage{listings}
 \usepackage{tikz}
@@ -12,8 +13,40 @@
     text width=1em, text centered, rounded corners, minimum height=2em]
 
 \lstset{ %
-language=Java,
-basicstyle=\ttfamily,commentstyle=\scriptsize\itshape,showstringspaces=false,breaklines=true,numbers=left}
+  basicstyle=\ttfamily,commentstyle=\scriptsize\itshape,showstringspaces=false,breaklines=true,numbers=none}
+\lstset{
+     literate=%
+         {á}{{\'a}}1
+         {í}{{\'i}}1
+         {é}{{\'e}}1
+         {ý}{{\'y}}1
+         {ú}{{\'u}}1
+         {ó}{{\'o}}1
+         {ě}{{\v{e}}}1
+         {š}{{\v{s}}}1
+         {č}{{\v{c}}}1
+         {ř}{{\v{r}}}1
+         {ž}{{\v{z}}}1
+         {ď}{{\v{d}}}1
+         {ť}{{\v{t}}}1
+         {ň}{{\v{n}}}1                
+         {ů}{{\r{u}}}1
+         {Á}{{\'A}}1
+         {Í}{{\'I}}1
+         {É}{{\'E}}1
+         {Ý}{{\'Y}}1
+         {Ú}{{\'U}}1
+         {Ó}{{\'O}}1
+         {Ě}{{\v{E}}}1
+         {Š}{{\v{S}}}1
+         {Č}{{\v{C}}}1
+         {Ř}{{\v{R}}}1
+         {Ž}{{\v{Z}}}1
+         {Ď}{{\v{D}}}1
+         {Ť}{{\v{T}}}1
+         {Ň}{{\v{N}}}1                
+         {Ů}{{\r{U}}}1    
+}
 
 \newtheorem{defn}{Definition}
 \newtheorem{crit}{Criterion}
@@ -71,8 +104,60 @@ basicstyle=\ttfamily,commentstyle=\scriptsize\itshape,showstringspaces=false,bre
 
 \begin{document}
 
-\lecture{4 --- October 4, 2016}{Fall 2016}{Patrick Lam}{version 1}
+\lecture{5 --- October 13, 2016}{Fall 2016}{Patrick Lam}{version 1}
 
+\section*{Paragraphs}
+
+Paragraphs help readers understand your text better by making its structure more obvious.
+A wall-of-text, by contrast, is hard to read, and many readers will just give up
+and move on to the next thing.
+
+Each paragraph should contain one message. Use an appropriate number
+of sentences to convey the message. Each sentence should contribute
+some new information, while showing a connection to the previous
+sentence. Aim to make your paragraphs self-contained, that is,
+meaningful in isolation; provide some context.
+
+The best paragraphs succinctly state their message near the beginning, ideally in the
+first sentence. (That is, however, not a hard-and-fast rule). Texts that follow this
+rule are easier to skim, since it's possible to just look at the first sentence.
+
+Some examples of paragraphs from \emph{Trees, maps, and theorems} by Jean-luc Doumont:
+
+\begin{minipage}{.49\textwidth}
+BAD (misleading lede):
+\hspace*{-1em}\begin{quote}
+  Single-use, disposable medical devices are packaged and sterilized by the manufacturer.
+  Their packaging must provide protection, facilitate sterilization, maintain sterility\ldots~
+  Reusable devices, by contrast, must be \ldots
+\end{quote}
+\vspace*{2em}
+\end{minipage} \begin{minipage}{.5\textwidth}
+GOOD:
+\begin{quote}
+  Medical devices may be broadly divided into two categories,
+  disposable and reusable, having different sterilization
+  requirements. Single-use, disposable devices are packaged and
+  sterilized by the manufacturer\ldots ~ Reusable devices, by
+  contrast, must be \ldots
+\end{quote}
+\end{minipage}
+
+\begin{minipage}{.49\textwidth}
+BAD (rambling storytime!):
+\begin{quote}
+  Figure 2 shows the evolution of the Ge content in the SiGe layer.
+  Obviously there is a nearly linear decrease of the Ge content with
+  increasing fluence. Knowing the \ldots
+\end{quote}
+\end{minipage} \begin{minipage}{.5\textwidth}
+GOOD:
+\begin{quote}
+  The germanium content decreases linearly with increasing fluence (Figure~2).
+\end{quote}
+\end{minipage}
+
+\newpage
 \section*{Written Communication: Code and Emails}
 
 \section*{Code documentation}
@@ -118,6 +203,27 @@ Some best practices for code comments:
 \item use unit tests and assertions (more later).
 \end{enumerate}
 
-more to come
+\newpage
+\section*{Writing emails}
+Reading and writing emails is central to my job. Although writing code might be
+more important for some of you, writing good emails will boost your effectiveness.
+Here's some email-writing tips.
+
+Let's consider a sample email.
+
+\lstset{escapeinside={(*@}{@*)}}
+\lstset{extendedchars=true}
+\lstinputlisting{sample-email.txt}
+
+Some important points:
+\begin{enumerate}
+\item recipient: make sure you're sending your email to the right person (in this case,
+  I had to do a couple of Google searches); use ``cc'' for those who need to know but not act.
+\item subject line: super important! empty subject lines often get ignored; good subject lines provide context and summarize actions required.
+\item provide context: you might judiciously quote the preceding message or otherwise explain the context.
+\item make the request: be explicit and say what action you require the recipient to take;
+\item signature (as relevant)
+  
+\end{enumerate}
 
 \end{document}
