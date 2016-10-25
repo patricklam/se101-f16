@@ -9,7 +9,7 @@
 - Use `switch` for stringing together equality checks for number-like types: `char`, `int`, ...
 - Avoid commenting every line of code. Consider reworking your naming and control flow for clarity if you feel the need to explain your code.
 - Write descriptive names for variables, structs, and functions.
-- Block comment functions that *cannot* be named clearly!
+- Block comment functions that *cannot* be named clearly! See [here](Coding_Guideline.md#functions) for an example.
 - Avoid the comma operator. It rarely improves the quality of your code.
   - This applies to variable declarations as well!
 
