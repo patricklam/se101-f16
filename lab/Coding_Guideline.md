@@ -64,7 +64,28 @@ There is more nuance to naming but these rules suffice.
 ```
 static void draw();
 ```
-Is this a well-named function? No! It invites the question: draw what? It is likely the case that the developer of this function could've described what the function was drawing without yielding a large, unwieldy name. If the function cannot be described in a short name, at the very minimum a block comment should describe it. Your parameters should be named likewise.
+Is this a well-named function? No! It invites the question: draw what? It is likely the case that the developer of this function could've described what the function was drawing without yielding a large, unwieldy name. One may find these short names adequate if supplied with context, e.g. class instance, parameter types to dispatch on. This is the case in C if you have an adequately named type in the parameter, such as:
+```
+static void draw(Circle a);
+```
+
+If the function cannot be described in a short name, at the very minimum a block comment should describe it like so:
+```
+/** Nameserver Registration Method
+ *
+ *  This method is called by user tasks to register themselves to
+ *  a particular name. Currently registration of all names must be performed before any
+ *  WhoIs requests are served. This may lead to race conditions if the
+ *  initial tasks are not structured correctly. Use with caution.
+ *
+ *  @param name The Name the calling task should be registered to.
+ *  @return Zero on success.
+ */
+S32 nsRegister( TaskName name );
+```
+This is a function pulled straight out of my team's CS452 (Real Time) kernel implementation. Notice that the name cannot provide the detailed information necessary to use this function safely and effectively!
+
+Your parameters should follow the variable naming convention.
 
 Here is another example of poor naming, from my own code:
 ```
