@@ -1,0 +1,150 @@
+\documentclass{beamer}
+\usepackage{url}
+\usepackage{verbatim}
+\usepackage{listings}
+
+\lstset{basicstyle=\ttfamily \scriptsize,
+  basicstyle=\ttfamily,
+   columns=fullflexible,
+   breaklines=true,
+   numbers=left,
+   numberstyle=\scriptsize,
+   stepnumber=1,
+   mathescape=false,
+   tabsize=2,
+   showstringspaces=false
+}
+
+\usetheme[compress]{Berlin}
+
+\begin{document}
+
+\title{Lab 1 Debrief}
+\author[Rollen]{Rollen D'Souza \\ \url{rs2dsouz@uwaterloo.ca}}
+\date{06 October 2016}
+\institute{University of Waterloo}
+
+\begin{frame}
+	\titlepage
+\end{frame}
+
+\begin{frame}
+	\frametitle{Outline}
+	\tableofcontents
+\end{frame}
+
+\section{General Feedback}
+\subsection{Source Control}
+\begin{frame}
+	\frametitle{Using Subversion}
+	\begin{itemize}
+		\item Setup your SVN \alert{before} creating a project! \pause
+		\item Commit code that compiles. \pause
+		\item Commits should add/remove features or fix bugs, in general. \pause
+		\item Please, only one copy of your assignment.
+	\end{itemize}
+\end{frame}
+\begin{frame}[fragile]
+	\frametitle{Why only one copy}
+	\begin{example}
+		\texttt{svn log . -v}
+		\begin{verbatim}
+r1138 | | 2016-09-29 11:29:26 -0400 
+
+r1137 | | 2016-09-29 11:28:58 -0400
+
+r1136 | | 2016-09-29 11:28:33 -0400
+		\end{verbatim}
+	\end{example}
+	\pause
+	\begin{example}
+		\texttt{svn update -r 1136}\\
+		\texttt{svn update -r \{2016-10-06T11:30\}}
+	\end{example}
+\end{frame}
+
+\subsection{C Programming}
+\begin{frame}[fragile]
+	\frametitle{C Arrays and Strings}
+	What is wrong with the following piece of code?
+	\begin{example}
+		\begin{lstlisting}[language=C]
+			char buffer[500];
+			readIntoBuffer(buffer);
+			printf(buffer);
+		\end{lstlisting} 
+	\end{example}
+	\pause
+	What if \texttt{readIntoBuffer} didn't write to \texttt{buffer}?
+\end{frame}
+\begin{frame}[fragile]
+	\frametitle{C Arrays and Strings}
+	Always initialize your arrays!
+	\begin{example}
+		\begin{lstlisting}[language=C]
+			char buffer[500] = { 0 };
+			readIntoBuffer(buffer);
+			printf(buffer);
+		\end{lstlisting}
+	\end{example}
+\end{frame}
+
+\begin{frame}[fragile]
+	\frametitle{Switches}
+	\begin{example}
+	\begin{lstlisting}[language=C]
+		switch(character)
+		{
+		case 'A':
+		case 'a':
+			// code here.
+			break;
+
+		case 'B':
+		case 'b':
+			// more code here.
+			break;
+		}
+	\end{lstlisting}
+	\end{example}
+\end{frame}
+
+\section{Lab Specifics}
+\subsection{Lab Solution}
+\begin{frame}
+	\frametitle{Lab Solution}
+	See Code in Repository.
+\end{frame}
+
+\subsection{Advice for the Future}
+\begin{frame}
+	\frametitle{Solution Take-Aways}
+	\begin{itemize}
+		\item Tempted to hard-code a number? Use a \texttt{\#define} or \texttt{const int} instead. \pause
+		\item{Use more than one file.
+			\begin{itemize}
+				\item \texttt{extern}
+				\item \texttt{forward declarations}
+			\end{itemize}
+		} \pause
+		\item Functions are for reusable code. \pause
+		\item{Use the C Standard Library \\ See \url{http://en.cppreference.com/w/c}}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Advice}
+	\begin{itemize}
+		\item Be Careful and Methodical. \pause
+		\item{Ask for help early!
+			\begin{itemize}
+				\item Piazza
+				\item Email
+				\item Your Peers
+			\end{itemize}
+		} \pause
+		\item If you are unsure how to make your code better, talk it out!
+	\end{itemize}
+\end{frame}
+
+\end{document}
