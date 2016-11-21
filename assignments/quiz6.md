@@ -1,5 +1,5 @@
 # SE 101 Quiz/Assignment 6
-## Due: Tuesday, November 18, 2016 at 11:59PM
+## Due: Friday, November 18, 2016 at 11:59PM
 
 Please submit one write-up per group. Groups can include at most 6
 people. Write the names and WatIDs of your group members at the top of
