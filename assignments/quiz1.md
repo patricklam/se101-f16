@@ -12,3 +12,5 @@ This quiz is open-book. In fact you can even (quietly) talk to your neighbour ab
 ### Question 4: When and where are today's SE2018-led resumé critiques?
 
 ### Question 5: What is the default form of address for an instructor at a university?
+
+### Question 6: Draw a logo for Software Engineering 2021 swag.
